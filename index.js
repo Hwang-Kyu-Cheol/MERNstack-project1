@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { User } = require('./models/User');
+const { auth } = require('./middleware/auth');
 const config = require('./config/key');
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -19,7 +20,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
-app.post('/register', (req, res) => {
+app.post('/api/users/register', (req, res) => {
   const user = new User(req.body);
   user.save((error, newUser) => {
     if(error){
@@ -29,7 +30,7 @@ app.post('/register', (req, res) => {
   });
 });
 
-app.post('/login', (req, res) => {
+app.post('/api/users/login', (req, res) => {
   User.findOne( { email: req.body.email }, function(err, user){
     if(!user){
       return res.json({
@@ -51,11 +52,26 @@ app.post('/login', (req, res) => {
         }
         return res.cookie("x_auth", user.token).status(200).json({
           logInSuccess: true,
-          message: `${user.id} 로그인 완료`
+          message: `${user.token} 로그인 완료`
         });
       });
     });
   });
+});
+
+app.get('/api/users/auth', auth, (req, res) => {
+  if(!req.user){
+    return res.json({ isAuth: false, message: "사용자를 찾을 수 없습니다."});
+  } else {
+    return res.status(200).json({
+      isAuth: true,
+      user: req.user
+    });
+  }
+});
+
+app.use((err, req, res, next) => {
+  res.status(500).send('Some Error!!');
 });
 
 app.listen(port, () => {

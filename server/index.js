@@ -17,8 +17,12 @@ mongoose.connect(config.mongoURI, {
 }).then(() => console.log("Mongoose Connected...")).catch((err) => console.log(err));
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello World!~~~~');
 });
+
+app.get('/api/hello', (req, res) => {
+  res.send('axio send response');
+})
 
 app.post('/api/users/register', (req, res) => {
   const user = new User(req.body);
@@ -68,6 +72,19 @@ app.get('/api/users/auth', auth, (req, res) => {
       user: req.user
     });
   }
+});
+
+app.get('/api/users/logout', auth, (req, res, next) => {
+  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    if(err){
+      next(err);
+    } else {
+      return res.status(200).json({
+        logOutSuccess: true,
+        message: `${req.user.email} 사용자 로그아웃`
+      });
+    }
+  });
 });
 
 app.use((err, req, res, next) => {

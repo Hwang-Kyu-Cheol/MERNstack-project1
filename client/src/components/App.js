@@ -8,7 +8,6 @@ import {
 import LandingPage from './views/LandingPage/LandingPage';
 import LoginPage from './views/LoginPage/LoginPage';
 import RegisterPage from './views/RegisterPage/RegisterPage';
-
 import Footer from './views/Footer/Footer';
 import NavBar from './views/NavBar/NavBar';
 

@@ -14,17 +14,7 @@ import NavBar from './views/NavBar/NavBar';
 function App() {
   return (
     <Router>
-      <div className="home">
-
-      </div>
-      <div className="navigation">
-        <ul>
-          <li><Link to="/login">Login</Link></li>
-          <li><Link to="/register">Register</Link></li>
-        </ul>
-      </div>
-      <hr></hr>
-      <div className="article">
+      <div>
         <Switch>
           <Route exact path="/" component={LandingPage} />
           <Route exact path="/login" component={LoginPage} />

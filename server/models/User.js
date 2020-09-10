@@ -83,7 +83,6 @@ userSchema.statics.findByToken = function(token, callBack){
 
         userModel.findOne({ _id: decoded, token: token }, function(err, user){
             if(err){
-                console.log("2");
                 return callBack(err);
             } else {
                 return callBack(null, user);
